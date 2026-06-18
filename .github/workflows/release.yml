@@ -4,13 +4,19 @@ name: Release
 # On a push to main with pending changesets, the action opens/updates a
 # "Version Packages" PR; once that PR is merged, it publishes.
 #
-# Publish auth is npm OIDC *trusted publishing* — NO stored token:
+# Dual-publish: the public package goes to npmjs (OIDC trusted publishing, with
+# provenance) AND to GitHub Packages (npm.pkg.github.com), so internal consumers
+# that route the @revenexx scope to GitHub Packages (e.g. the Cockpit) can
+# install it too.
+#
+# npmjs publish auth is npm OIDC *trusted publishing* — NO stored token:
 #   - npmjs must have a trusted publisher configured for the package
 #     (repo: revenexx/storage-model-viewer, workflow: release.yml).
 #     https://docs.npmjs.com/trusted-publishers
 #   - needs id-token: write + npm CLI >= 11.5.1 + Node >= 22.14.0.
 #   - the repo is public, so npm provenance is generated automatically.
-# GITHUB_TOKEN is only used by the action to open/update the Version PR.
+# GitHub Packages publish uses GITHUB_TOKEN (packages: write); no provenance
+# there. GITHUB_TOKEN is also used by the changesets action to open the Version PR.
 on:
   push:
     branches: [main]
@@ -37,8 +43,29 @@ jobs:
       - run: npm install -g npm@latest
       - run: pnpm install --frozen-lockfile
       - uses: changesets/action@v1
+        id: changesets
         with:
           version: pnpm run version
           publish: pnpm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Mirror the current version to GitHub Packages (idempotent — skips if it's
+      # already there). Runs whenever main is published-ready, so it also back-
+      # fills a version first released to npmjs. No provenance on GH Packages.
+      - name: Publish to GitHub Packages
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo "@revenexx:registry=https://npm.pkg.github.com"
+            echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}"
+          } >> .npmrc
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "@revenexx/storage-model-viewer@${VERSION}" version --registry https://npm.pkg.github.com >/dev/null 2>&1; then
+            echo "@revenexx/storage-model-viewer@${VERSION} already on GitHub Packages — skipping"
+          else
+            pnpm build
+            npm publish --registry https://npm.pkg.github.com --no-provenance
+          fi
