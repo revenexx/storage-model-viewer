@@ -30,7 +30,7 @@ export type EngineMount = (
 
 export class RxModelViewer extends HTMLElement {
   static readonly observedAttributes = [
-    'src', 'poster', 'engine', 'ar', 'background', 'auto-rotate', 'camera-orbit',
+    'src', 'poster', 'engine', 'ar', 'ios-src', 'background', 'auto-rotate', 'camera-orbit',
   ]
 
   #root: ShadowRoot

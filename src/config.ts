@@ -9,6 +9,8 @@ export interface ViewerConfig {
   engine: ViewerEngine
   /** Enable AR (only honoured by the 'model-viewer' engine). */
   ar: boolean
+  /** USDZ URL for iOS AR Quick Look (model-viewer ios-src). The asset's usdz_url. */
+  iosSrc: string | null
   /** CSS background color; when unset the canvas is transparent. */
   background: string | null
   /** Auto-rotate the model. */
@@ -27,6 +29,7 @@ export function readConfig(el: Element): ViewerConfig {
     poster: el.getAttribute('poster'),
     engine: el.getAttribute('engine') === 'model-viewer' ? 'model-viewer' : 'three',
     ar: el.hasAttribute('ar'),
+    iosSrc: el.getAttribute('ios-src'),
     background: el.getAttribute('background'),
     autoRotate: el.hasAttribute('auto-rotate'),
     cameraOrbit: el.getAttribute('camera-orbit'),

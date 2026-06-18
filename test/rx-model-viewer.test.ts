@@ -32,7 +32,8 @@ describe('readConfig', () => {
 
     el.setAttribute('engine', 'model-viewer')
     el.setAttribute('ar', '')
-    expect(readConfig(el)).toMatchObject({ engine: 'model-viewer', ar: true })
+    el.setAttribute('ios-src', 'part.usdz')
+    expect(readConfig(el)).toMatchObject({ engine: 'model-viewer', ar: true, iosSrc: 'part.usdz' })
 
     el.setAttribute('engine', 'bogus')
     expect(readConfig(el).engine).toBe('three')

@@ -21,6 +21,8 @@ export async function mountModelViewer(root: ShadowRoot, config: ViewerConfig): 
   if (config.ar) {
     el.setAttribute('ar', '')
     el.setAttribute('ar-modes', 'webxr scene-viewer quick-look')
+    // iOS Quick Look renders the USDZ, not the glb.
+    if (config.iosSrc) el.setAttribute('ios-src', config.iosSrc)
   }
 
   el.style.width = '100%'

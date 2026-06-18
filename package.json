@@ -1,6 +1,6 @@
 {
   "name": "@revenexx/storage-model-viewer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Framework-agnostic <rx-model-viewer> web component for revenexx storage 3D assets (three.js by default, Google model-viewer/AR as a configurable engine).",
   "type": "module",
   "license": "MIT",

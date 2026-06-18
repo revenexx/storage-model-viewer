@@ -44,6 +44,7 @@ downloads the engine it uses:
 | `poster` | Preview image shown before/while loading (`preview_url`). |
 | `engine` | `three` (default) or `model-viewer`. |
 | `ar` | Enable AR (model-viewer engine only). |
+| `ios-src` | USDZ URL for iOS AR Quick Look (the asset's `usdz_url`). Android uses the `.glb`; iOS needs this USDZ. |
 | `background` | CSS color; transparent when unset. |
 | `auto-rotate` | Auto-rotate the model. |
 | `camera-orbit` | Initial camera orbit (model-viewer syntax). |
