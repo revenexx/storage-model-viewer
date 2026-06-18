@@ -1,0 +1,57 @@
+{
+  "name": "@revenexx/storage-model-viewer",
+  "version": "0.1.0",
+  "description": "Framework-agnostic <rx-model-viewer> web component for revenexx storage 3D assets (three.js by default, Google model-viewer/AR as a configurable engine).",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/revenexx/storage-model-viewer.git"
+  },
+  "keywords": ["web-component", "3d", "glb", "gltf", "three", "model-viewer", "revenexx"],
+  "sideEffects": ["./dist/index.mjs"],
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "vitest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:types": "tsc --noEmit",
+    "prepack": "unbuild",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish"
+  },
+  "dependencies": {
+    "@google/model-viewer": "^3.5.0",
+    "three": "^0.171.0"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.0",
+    "@types/node": "^22.0.0",
+    "@types/three": "^0.171.0",
+    "eslint": "^9.0.0",
+    "jsdom": "^25.0.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.0.0",
+    "unbuild": "^3.0.0",
+    "vitest": "^2.1.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public",
+    "provenance": true
+  },
+  "packageManager": "pnpm@10.23.0"
+}
