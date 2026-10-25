@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "storage-model-viewer"
+  description: "Framework-agnostic <rx-model-viewer> web component for revenexx Storage 3D assets (three.js and model-viewer/AR)."
+  annotations:
+    github.com/project-slug: revenexx/storage-model-viewer
+spec:
+  type: library
+  owner: group:default/frontend-engineering
+  system: revenue-cloud
+  lifecycle: experimental
