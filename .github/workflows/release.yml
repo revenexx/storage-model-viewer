@@ -45,16 +45,16 @@ jobs:
       - uses: changesets/action@v2
         id: changesets
         with:
-          version: pnpm run version
-          publish: pnpm run release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          version-script: pnpm run version
+          publish-script: pnpm run release
+          # v2 takes the token only as this input; GITHUB_TOKEN in env is ignored.
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Mirror the current version to GitHub Packages (idempotent — skips if it's
       # already there). Runs whenever main is published-ready, so it also back-
       # fills a version first released to npmjs. No provenance on GH Packages.
       - name: Publish to GitHub Packages
-        if: steps.changesets.outputs.hasChangesets == 'false'
+        if: steps.changesets.outputs.has-changesets == 'false'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
