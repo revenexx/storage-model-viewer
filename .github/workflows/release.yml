@@ -32,9 +32,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -42,19 +42,19 @@ jobs:
       # bundled with Node 22). pnpm publish shells out to this npm for auth.
       - run: npm install -g npm@latest
       - run: pnpm install --frozen-lockfile
-      - uses: changesets/action@v1
+      - uses: changesets/action@v2
         id: changesets
         with:
-          version: pnpm run version
-          publish: pnpm run release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          version-script: pnpm run version
+          publish-script: pnpm run release
+          # v2 takes the token only as this input; GITHUB_TOKEN in env is ignored.
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Mirror the current version to GitHub Packages (idempotent — skips if it's
       # already there). Runs whenever main is published-ready, so it also back-
       # fills a version first released to npmjs. No provenance on GH Packages.
       - name: Publish to GitHub Packages
-        if: steps.changesets.outputs.hasChangesets == 'false'
+        if: steps.changesets.outputs.has-changesets == 'false'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
